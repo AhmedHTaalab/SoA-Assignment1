@@ -7,6 +7,12 @@ import java.lang.String;
 @RequestMapping("/Student")
 public class StudentController {
 
+    private final StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
     @GetMapping("/")
     public String getAllStudents(){
        return "test test i love you";
@@ -22,9 +28,10 @@ public class StudentController {
         return String.format("Hello %s!", name);
     }
 
-    @PostMapping("/Student")
-    public String addStudent(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello %s!", name);
+    @PostMapping("/")
+    public void addStudent(@RequestBody StudentModel student) {
+        String filePath = "/Users/Youssef/Projects/SoA-Assignment1/students.xml";
+        studentService.addStudent(filePath, student);
     }
 
     @DeleteMapping("/deleteByID/{ID}")

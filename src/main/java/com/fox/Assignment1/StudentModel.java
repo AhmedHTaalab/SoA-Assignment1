@@ -4,13 +4,9 @@ public class StudentModel {
     private String ID;
     private String Firstname;
     private String Lastname;
-
     private String Gender;
-
     private double GPA;
-
     private int Level;
-
     private String Address;
 
     public StudentModel(String ID, String firstname, String lastname, String gender, double GPA, int level, String address) {
