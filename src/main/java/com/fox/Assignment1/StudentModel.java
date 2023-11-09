@@ -2,21 +2,17 @@ package com.fox.Assignment1;
 
 public class StudentModel {
     private String ID;
-    private String Firstname;
-    private String Lastname;
-
+    private String FirstName;
+    private String LastName;
     private String Gender;
-
     private double GPA;
-
     private int Level;
-
     private String Address;
 
     public StudentModel(String ID, String firstname, String lastname, String gender, double GPA, int level, String address) {
         this.ID = ID;
-        this.Firstname = firstname;
-        this.Lastname = lastname;
+        this.FirstName = firstname;
+        this.LastName = lastname;
         this.Gender = gender;
         this.GPA = GPA;
         this.Level = level;
@@ -31,24 +27,24 @@ public class StudentModel {
         this.ID = ID;
     }
 
-    public String getFirstname() {
-        return Firstname;
+    public String getFirstName() {
+        return this.FirstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.Firstname = firstname;
+    public void setFirstName(String firstname) {
+        this.FirstName = firstname;
     }
 
-    public String getLastname() {
-        return Lastname;
+    public String getLastName() {
+        return this.LastName;
     }
 
-    public void setLastname(String lastname) {
-        this.Lastname = lastname;
+    public void setLastName(String lastname) {
+        this.LastName = lastname;
     }
 
     public String getGender() {
-        return Gender;
+        return this.Gender;
     }
 
     public void setGender(String gender) {
@@ -56,7 +52,7 @@ public class StudentModel {
     }
 
     public double getGPA() {
-        return GPA;
+        return this.GPA;
     }
 
     public void setGPA(double GPA) {
@@ -64,7 +60,7 @@ public class StudentModel {
     }
 
     public int getLevel() {
-        return Level;
+        return this.Level;
     }
 
     public void setLevel(int level) {
@@ -72,7 +68,7 @@ public class StudentModel {
     }
 
     public String getAddress() {
-        return Address;
+        return this.Address;
     }
 
     public void setAddress(String address) {

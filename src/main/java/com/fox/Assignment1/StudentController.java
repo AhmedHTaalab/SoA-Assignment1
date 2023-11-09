@@ -1,10 +1,6 @@
 package com.fox.Assignment1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +18,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/TEST")
+    @GetMapping("/")
     public List<StudentModel> getAllStudents() {
 
         List<StudentModel> Students = new ArrayList<>();
@@ -53,7 +49,7 @@ public class StudentController {
         List<StudentModel> studentsWithTargetName= new ArrayList<>();
 
         for (StudentModel student : students) {
-            if (student.getFirstname() == targetName) {
+            if (student.getFirstName() == targetName) {
                 studentsWithTargetName.add(student);
             }
         }
@@ -61,9 +57,10 @@ public class StudentController {
         return studentsWithTargetName;
     }
 
-    @PostMapping("/Student")
-    public String addStudent(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello %s!", name);
+    @PostMapping("/")
+    public void addStudent(@RequestBody StudentModel student) {
+        String filePath = "/Users/Youssef/Projects/SoA-Assignment1/students.xml";
+        studentService.addStudent(filePath, student);
     }
 
     @DeleteMapping("/deleteByID/{ID}")
