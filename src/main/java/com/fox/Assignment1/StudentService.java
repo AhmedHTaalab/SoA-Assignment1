@@ -24,7 +24,8 @@ public class StudentService {
 
         // Load the input XML document, parse it and return an instance of the
         // Document class.
-        Document document = builder.parse(new File("D:\\College\\SOA\\JavaSpring\\Student.xml"));
+        // TODO: Change the path to the XML file
+        Document document = builder.parse(new File("/Users/Youssef/Projects/SoA-Assignment1/students.xml"));
 
         List<StudentModel> Students = new ArrayList<StudentModel>();
         NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -38,10 +39,10 @@ public class StudentService {
                 String ID = node.getAttributes().getNamedItem("ID").getNodeValue();
 
                 // Get the value of all sub-elements.
-                String firstname = elem.getElementsByTagName("Firstname")
+                String firstname = elem.getElementsByTagName("FirstName")
                         .item(0).getChildNodes().item(0).getNodeValue();
 
-                String lastname = elem.getElementsByTagName("Lastname").item(0)
+                String lastname = elem.getElementsByTagName("LastName").item(0)
                         .getChildNodes().item(0).getNodeValue();
 
                 String Gender = elem.getElementsByTagName("Gender").item(0)
