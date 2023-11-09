@@ -38,8 +38,8 @@ public class StudentService {
         studentElement.setAttribute("ID", student.getID());
 
         // Create child elements for the student
-        createElementWithTextContent(doc, studentElement, "FirstName", student.getFirstname());
-        createElementWithTextContent(doc, studentElement, "LastName", student.getLastname());
+        createElementWithTextContent(doc, studentElement, "FirstName", student.getFirstName());
+        createElementWithTextContent(doc, studentElement, "LastName", student.getLastName());
         createElementWithTextContent(doc, studentElement, "Gender", student.getGender());
         createElementWithTextContent(doc, studentElement, "GPA", String.valueOf(student.getGPA()));
         createElementWithTextContent(doc, studentElement, "Level", String.valueOf(student.getLevel()));
@@ -48,7 +48,8 @@ public class StudentService {
         return studentElement;
     }
 
-    private void createElementWithTextContent(Document doc, Element parentElement, String tagName,
+    private void createElementWithTextContent(
+        Document doc, Element parentElement, String tagName,
             String textContent) {
         Element element = doc.createElement(tagName);
         element.setTextContent(textContent);
