@@ -1,6 +1,5 @@
 package com.fox.Assignment1;
 
-import jakarta.xml.bind.JAXBException;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,7 +20,7 @@ import java.util.Objects;
 
 @Service
 public class StudentService {
-    public static List<StudentModel> XMLRead() {
+    public List<StudentModel> XMLRead() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -29,7 +28,7 @@ public class StudentService {
             // Load the input XML document, parse it and return an instance of the
             // Document class.
             // TODO: Change the path to the XML file
-            Document document = builder.parse(new File("D:\\College\\SOA\\JavaSpring\\Assignment1\\test.xml"));
+            Document document = builder.parse(new File(Settings.XML_FILE_PATH));
 
             List<StudentModel> Students = new ArrayList<StudentModel>();
             NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -148,12 +147,43 @@ public class StudentService {
         }
     }
 
-    public static void deleteStudentByID(String studentID, String filePath) throws JAXBException {
+    public void deleteStudentByID(String studentID, String filePath) {
         // Read XML file
         List<StudentModel> Students = new ArrayList<>();
         Students = XMLRead();
 
         Students.removeIf(student -> Objects.equals(student.getID(), studentID));
 
+        try {
+            // Create a new Document object using DocumentBuilderFactory and DocumentBuilder classes
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Parse the XML file using the Document object
+            Document doc = dBuilder.parse(new File(filePath));
+
+            // Get the root element (University)
+            Element universityElement = doc.getDocumentElement();
+
+            // Remove all child nodes of the root element
+            NodeList childNodes = universityElement.getChildNodes();
+            for (int i = childNodes.getLength() - 1; i >= 0; i--) {
+                Node node = childNodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    universityElement.removeChild(node);
+                }
+            }
+
+            // Create new student elements and add them to the root element
+            for (StudentModel student : Students) {
+                Element newStudentElement = createStudentElement(doc, student);
+                universityElement.appendChild(newStudentElement);
+            }
+
+            // Write the updated XML file
+            writeXmlFile(doc, filePath);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }

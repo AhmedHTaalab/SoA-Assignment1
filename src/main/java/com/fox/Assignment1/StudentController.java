@@ -1,13 +1,11 @@
 package com.fox.Assignment1;
-import jakarta.xml.bind.JAXBException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
-
 
 @RestController
 @RequestMapping("/Student")
@@ -25,13 +23,12 @@ public class StudentController {
 
         List<StudentModel> Students = new ArrayList<>();
         Students = studentService.XMLRead();
-        return  Students;
+        return Students;
     }
 
-
     @GetMapping("/ByGPA/{targetGPA}")
-    public List<StudentModel> getStudentsByGPA(@PathVariable  double targetGPA) {
-        List<StudentModel> students = StudentService.XMLRead(); // Assuming XMLRead returns a list of all students
+    public List<StudentModel> getStudentsByGPA(@PathVariable double targetGPA) {
+        List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetGPA = new ArrayList<>();
 
@@ -45,10 +42,10 @@ public class StudentController {
     }
 
     @GetMapping("/ByName/{targetName}")
-    public List<StudentModel> getStudentsByName(@PathVariable  String targetName) {
+    public List<StudentModel> getStudentsByName(@PathVariable String targetName) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
-        List<StudentModel> studentsWithTargetName= new ArrayList<>();
+        List<StudentModel> studentsWithTargetName = new ArrayList<>();
 
         for (StudentModel student : students) {
             if (Objects.equals(student.getFirstName(), targetName)) {
@@ -61,29 +58,19 @@ public class StudentController {
 
     @PostMapping("/")
     public String addStudent(@RequestBody StudentModel student) {
-        String filePath = "D:\\College\\SOA\\JavaSpring\\Assignment1\\test.xml";
-        studentService.addStudent(filePath, student);
+        studentService.addStudent(Settings.XML_FILE_PATH, student);
         return "Student Added";
     }
 
-//    @DeleteMapping("/deleteByID/{ID}")
-//    public String deleteStudent(@PathVariable int ID){
-//        return String.format("Test");
-//    }
+    // @DeleteMapping("/deleteByID/{ID}")
+    // public String deleteStudent(@PathVariable int ID){
+    // return String.format("Test");
+    // }
     @DeleteMapping("/deleteByID/{ID}")
     public String deleteStudent(@PathVariable String ID) {
-        try {
-            String filePath = "D:\\College\\SOA\\JavaSpring\\Assignment1\\test.xml";
-            StudentService.deleteStudentByID(ID, filePath);
-            return String.format("Student with ID %d deleted successfully", ID);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-            return "Error deleting student.";
-        }
+        studentService.deleteStudentByID(ID, Settings.XML_FILE_PATH);
+        return String.format("Student with ID %s deleted successfully", ID);
+
     }
 
-
-
 }
-
-
