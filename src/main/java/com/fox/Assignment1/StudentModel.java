@@ -9,14 +9,14 @@ public class StudentModel {
     private int Level;
     private String Address;
 
-    public StudentModel(String ID, String firstname, String lastname, String gender, double GPA, int level, String address) {
+    public StudentModel(String ID, String FirstName, String LastName, String Gender, double GPA, int Level, String Address) {
         this.ID = ID;
-        this.FirstName = firstname;
-        this.LastName = lastname;
-        this.Gender = gender;
+        this.FirstName = FirstName;
+        this.LastName = LastName;
+        this.Gender = Gender;
         this.GPA = GPA;
-        this.Level = level;
-        this.Address = address;
+        this.Level = Level;
+        this.Address = Address;
     }
 
     public String getID() {
@@ -73,5 +73,18 @@ public class StudentModel {
 
     public void setAddress(String address) {
         this.Address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentModel{" +
+                "ID='" + ID + '\'' +
+                ", FirstName='" + FirstName + '\'' +
+                ", LastName='" + LastName + '\'' +
+                ", Gender='" + Gender + '\'' +
+                ", GPA=" + GPA +
+                ", Level=" + Level +
+                ", Address='" + Address + '\'' +
+                '}';
     }
 }
