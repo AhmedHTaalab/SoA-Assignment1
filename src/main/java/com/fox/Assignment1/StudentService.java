@@ -96,6 +96,8 @@ public class StudentService {
         Element studentElement = doc.createElement("Student");
         studentElement.setAttribute("ID", student.getID());
 
+        System.out.println(student.toString());
+
         // Create child elements for the student
         createElementWithTextContent(doc, studentElement, "FirstName", student.getFirstName());
         createElementWithTextContent(doc, studentElement, "LastName", student.getLastName());
