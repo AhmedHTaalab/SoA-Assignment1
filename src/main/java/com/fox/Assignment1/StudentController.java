@@ -1,10 +1,12 @@
 package com.fox.Assignment1;
+import jakarta.xml.bind.JAXBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
+import java.util.Scanner;
 
 
 @RestController
@@ -29,7 +31,7 @@ public class StudentController {
 
     @GetMapping("/ByGPA/{targetGPA}")
     public List<StudentModel> getStudentsByGPA(@PathVariable  double targetGPA) {
-        List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
+        List<StudentModel> students = StudentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetGPA = new ArrayList<>();
 
@@ -49,7 +51,7 @@ public class StudentController {
         List<StudentModel> studentsWithTargetName= new ArrayList<>();
 
         for (StudentModel student : students) {
-            if (student.getFirstName() == targetName) {
+            if (Objects.equals(student.getFirstName(), targetName)) {
                 studentsWithTargetName.add(student);
             }
         }
@@ -58,15 +60,29 @@ public class StudentController {
     }
 
     @PostMapping("/")
-    public void addStudent(@RequestBody StudentModel student) {
-        String filePath = "/Users/Youssef/Projects/SoA-Assignment1/students.xml";
+    public String addStudent(@RequestBody StudentModel student) {
+        String filePath = "D:\\College\\SOA\\JavaSpring\\Assignment1\\test.xml";
         studentService.addStudent(filePath, student);
+        return "Student Added";
     }
 
+//    @DeleteMapping("/deleteByID/{ID}")
+//    public String deleteStudent(@PathVariable int ID){
+//        return String.format("Test");
+//    }
     @DeleteMapping("/deleteByID/{ID}")
-    public String deleteStudent(@PathVariable int ID){
-        return String.format("Test");
+    public String deleteStudent(@PathVariable String ID) {
+        try {
+            String filePath = "D:\\College\\SOA\\JavaSpring\\Assignment1\\test.xml";
+            StudentService.deleteStudentByID(ID, filePath);
+            return String.format("Student with ID %d deleted successfully", ID);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            return "Error deleting student.";
+        }
     }
+
+
 
 }
 

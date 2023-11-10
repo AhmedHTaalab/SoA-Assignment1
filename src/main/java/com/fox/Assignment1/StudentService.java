@@ -1,5 +1,6 @@
 package com.fox.Assignment1;
 
+import jakarta.xml.bind.JAXBException;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,10 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.io.FileWriter;
+import java.util.Objects;
 
 @Service
 public class StudentService {
-    public List<StudentModel> XMLRead() {
+    public static List<StudentModel> XMLRead() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -27,7 +29,7 @@ public class StudentService {
             // Load the input XML document, parse it and return an instance of the
             // Document class.
             // TODO: Change the path to the XML file
-            Document document = builder.parse(new File("/Users/Youssef/Projects/SoA-Assignment1/students.xml"));
+            Document document = builder.parse(new File("D:\\College\\SOA\\JavaSpring\\Assignment1\\test.xml"));
 
             List<StudentModel> Students = new ArrayList<StudentModel>();
             NodeList nodeList = document.getDocumentElement().getChildNodes();
@@ -97,12 +99,12 @@ public class StudentService {
         studentElement.setAttribute("ID", student.getID());
 
         // Create child elements for the student
-        createElementWithTextContent(doc, studentElement, "FirstName", student.getFirstName());
-        createElementWithTextContent(doc, studentElement, "LastName", student.getLastName());
-        createElementWithTextContent(doc, studentElement, "Gender", student.getGender());
+        createElementWithTextContent(doc, studentElement, "FirstName", String.valueOf(student.getFirstName()));
+        createElementWithTextContent(doc, studentElement, "LastName", String.valueOf(student.getLastName()));
+        createElementWithTextContent(doc, studentElement, "Gender", String.valueOf(student.getGender()));
         createElementWithTextContent(doc, studentElement, "GPA", String.valueOf(student.getGPA()));
         createElementWithTextContent(doc, studentElement, "Level", String.valueOf(student.getLevel()));
-        createElementWithTextContent(doc, studentElement, "Address", student.getAddress());
+        createElementWithTextContent(doc, studentElement, "Address", String.valueOf(student.getAddress()));
 
         return studentElement;
     }
@@ -142,5 +144,14 @@ public class StudentService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void deleteStudentByID(String studentID, String filePath) throws JAXBException {
+        // Read XML file
+        List<StudentModel> Students = new ArrayList<>();
+        Students = XMLRead();
+
+        Students.removeIf(student -> Objects.equals(student.getID(), studentID));
+
     }
 }
