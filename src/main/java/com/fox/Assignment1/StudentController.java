@@ -62,10 +62,14 @@ public class StudentController {
         return "Student Added";
     }
 
-    // @DeleteMapping("/deleteByID/{ID}")
-    // public String deleteStudent(@PathVariable int ID){
-    // return String.format("Test");
-    // }
+    @PostMapping("/addStudents")
+    public String addStudents(@RequestBody List<StudentModel> students) {
+        for (StudentModel student : students) {
+            studentService.addStudent(Settings.XML_FILE_PATH, student);
+        }
+        return "Students Added";
+    }
+
     @DeleteMapping("/deleteByID/{ID}")
     public String deleteStudent(@PathVariable String ID) {
         studentService.deleteStudentByID(ID, Settings.XML_FILE_PATH);
