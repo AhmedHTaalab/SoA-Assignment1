@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><University>
-<Student ID="20200134"><FirstName/><LastName/><Gender/><GPA>3.17</GPA><Level>0</Level><Address/></Student>
-<Student ID="20200645"><FirstName/><LastName/><Gender/><GPA>8.0</GPA><Level>0</Level><Address/></Student>
-<Student ID="20200645"><FirstName/><LastName/><Gender/><GPA>8.0</GPA><Level>0</Level><Address/></Student></University>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<University>
+    <Student ID="20200067">
+        <FirstName>Ahmed</FirstName>
+        <LastName>Hesham</LastName>
+        <Gender>Male</Gender>
+        <GPA>5.0</GPA>
+        <Level>4</Level>
+        <Address>Giza</Address>
+    </Student>
+</University>
