@@ -5,11 +5,11 @@ public class StudentModel {
     private String FirstName;
     private String LastName;
     private String Gender;
-    private double GPA;
-    private int Level;
+    private Double GPA;
+    private Integer Level;
     private String Address;
 
-    public StudentModel(String ID, String FirstName, String LastName, String Gender, double GPA, int Level, String Address) {
+    public StudentModel(String ID, String FirstName, String LastName, String Gender, Double GPA, Integer Level, String Address) {
         this.ID = ID;
         this.FirstName = FirstName;
         this.LastName = LastName;
@@ -51,19 +51,19 @@ public class StudentModel {
         this.Gender = gender;
     }
 
-    public double getGPA() {
+    public Double getGPA() {
         return this.GPA;
     }
 
-    public void setGPA(double GPA) {
+    public void setGPA(Double GPA) {
         this.GPA = GPA;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return this.Level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.Level = level;
     }
 

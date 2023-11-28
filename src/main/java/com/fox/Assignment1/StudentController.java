@@ -27,7 +27,6 @@ public class StudentController {
         return Students;
     }
 
-
     @GetMapping("/ByGPA/{targetGPA}")
     public List<StudentModel> getStudentsByGPA(@PathVariable double targetGPA) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
@@ -87,6 +86,7 @@ public class StudentController {
 
         return studentsWithTargetGender;
     }
+
     @GetMapping("/ByID/{ID}")
     public List<StudentModel> getStudentsByID(@PathVariable String ID) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
@@ -136,6 +136,17 @@ public class StudentController {
     public String addStudent(@RequestBody StudentModel student) {
         studentService.addStudent(Settings.XML_FILE_PATH, student);
         return "Student Added";
+    }
+
+    @PutMapping("/updateByID/{ID}")
+    public StudentModel updateStudent(@PathVariable String ID, @RequestBody StudentModel student) {
+        return studentService.updateStudentByID(ID, Settings.XML_FILE_PATH,
+                student.getFirstName(),
+                student.getLastName(),
+                student.getGender(),
+                student.getGPA(),
+                student.getLevel(),
+                student.getAddress());
     }
 
     @DeleteMapping("/deleteByID/{ID}")

@@ -1,11 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<University>
-    <Student ID="20200067">
-        <FirstName>Ahmed</FirstName>
-        <LastName>Hesham</LastName>
-        <Gender>Male</Gender>
-        <GPA>5.0</GPA>
-        <Level>4</Level>
-        <Address>Giza</Address>
-    </Student>
-</University>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><University>
+
+    
+    
+    
+<Student ID="20200067"><FirstName>Ahmed</FirstName><LastName>Hesham</LastName><Gender>Male</Gender><GPA>5.0</GPA><Level>4</Level><Address>Giza</Address></Student><Student ID="20200645"><FirstName>youssef</FirstName><LastName>attai</LastName><Gender>Male</Gender><GPA>3.8</GPA><Level>4</Level><Address>Giza</Address></Student><Student ID="20200367"><FirstName>amr</FirstName><LastName>khaled</LastName><Gender>Male</Gender><GPA>3.82</GPA><Level>4</Level><Address>Faisal</Address></Student></University>

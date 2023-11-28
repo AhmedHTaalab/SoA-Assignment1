@@ -26,7 +26,8 @@ public class StudentService {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            // Load the input XML document, parse it and return an instance of the Document class.
+            // Load the input XML document, parse it and return an instance of the Document
+            // class.
             // TODO: Change the path to the XML file
             Document document = builder.parse(new File(Settings.XML_FILE_PATH));
 
@@ -100,59 +101,6 @@ public class StudentService {
         }
         return null;
     }
-
-//    public List<StudentModel> XMLRead() {
-//        try {
-//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//            // Load the input XML document, parse it and return an instance of the
-//            // Document class.
-//            // TODO: Change the path to the XML file
-//            Document document = builder.parse(new File(Settings.XML_FILE_PATH));
-//
-//            List<StudentModel> Students = new ArrayList<StudentModel>();
-//            NodeList nodeList = document.getDocumentElement().getChildNodes();
-//            for (int i = 0; i < nodeList.getLength(); i++) {
-//                Node node = nodeList.item(i);
-//
-//                if (node.getNodeType() == Node.ELEMENT_NODE) {
-//                    Element elem = (Element) node;
-//
-//                    // Get the value of the ID attribute.
-//                    String ID = node.getAttributes().getNamedItem("ID").getNodeValue();
-//
-//                    // Get the value of all sub-elements.
-//                    String firstname = elem.getElementsByTagName("FirstName")
-//                            .item(0).getChildNodes().item(0).getNodeValue();
-//
-//                    String lastname = elem.getElementsByTagName("LastName").item(0)
-//                            .getChildNodes().item(0).getNodeValue();
-//
-//                    String Gender = elem.getElementsByTagName("Gender").item(0)
-//                            .getChildNodes().item(0).getNodeValue();
-//
-//                    double GPA = Double.parseDouble(elem.getElementsByTagName("GPA")
-//                            .item(0).getChildNodes().item(0).getNodeValue());
-//
-//                    int Level = Integer.parseInt(elem.getElementsByTagName("Level")
-//                            .item(0).getChildNodes().item(0).getNodeValue());
-//
-//                    String Address = elem.getElementsByTagName("Address").item(0)
-//                            .getChildNodes().item(0).getNodeValue();
-//
-//                    Students.add(new StudentModel(ID, firstname, lastname, Gender, GPA, Level, Address));
-//                }
-//
-//            }
-//            return Students;
-//        } catch (IOException | ParserConfigurationException | SAXException e) {
-//            // Handle the exception or log it
-//            e.printStackTrace();
-//            return new ArrayList<>(); // Return an empty list or handle the error accordingly
-//        }
-//    }
-
 
     public void addStudent(
             String filePath,
@@ -229,6 +177,79 @@ public class StudentService {
         }
     }
 
+    public StudentModel updateStudentByID(String studentID, String filePath,
+            String newFirstName,
+            String newLastName,
+            String newGender,
+            Double newGPA,
+            Integer newLevel,
+            String newAddress) {
+        // Read XML file
+        List<StudentModel> Students = new ArrayList<>();
+        Students = XMLRead();
+
+        // find the student and copy the new data
+        StudentModel fonudStudent = Students.stream()
+                .filter(studentModel -> studentModel.getID().equals(studentID))
+                .findFirst()
+                .orElse(null);
+
+        if (fonudStudent != null) {
+            if (newFirstName != null)
+                fonudStudent.setFirstName(newFirstName);
+
+            if (newLastName != null)
+                fonudStudent.setLastName(newLastName);
+
+            if (newGender != null)
+                fonudStudent.setGender(newGender);
+
+            if (newGPA != null)
+                fonudStudent.setGPA(newGPA);
+
+            if (newLevel != null)
+                fonudStudent.setLevel(newLevel);
+
+            if (newAddress != null)
+                fonudStudent.setAddress(newAddress);
+        }
+
+        try {
+            // Create a new Document object using DocumentBuilderFactory and DocumentBuilder
+            // classes
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Parse the XML file using the Document object
+            Document doc = dBuilder.parse(new File(filePath));
+
+            // Get the root element (University)
+            Element universityElement = doc.getDocumentElement();
+
+            // Remove all child nodes of the root element
+            NodeList childNodes = universityElement.getChildNodes();
+            for (int i = childNodes.getLength() - 1; i >= 0; i--) {
+                Node node = childNodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    universityElement.removeChild(node);
+                }
+            }
+
+            // Create new student elements and add them to the root element
+            for (StudentModel student1 : Students) {
+                Element newStudentElement = createStudentElement(doc, student1);
+                universityElement.appendChild(newStudentElement);
+            }
+
+            // Write the updated XML file
+            writeXmlFile(doc, filePath);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return fonudStudent;
+    }
+
     public void deleteStudentByID(String studentID, String filePath) {
         // Read XML file
         List<StudentModel> Students = new ArrayList<>();
@@ -237,7 +258,8 @@ public class StudentService {
         Students.removeIf(student -> Objects.equals(student.getID(), studentID));
 
         try {
-            // Create a new Document object using DocumentBuilderFactory and DocumentBuilder classes
+            // Create a new Document object using DocumentBuilderFactory and DocumentBuilder
+            // classes
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
