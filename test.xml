@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><University>
-    <Student ID="20200057">
-        <FirstName>Ahmed</FirstName>
-        <LastName>Mohamed</LastName>
-        <Gender>Male</Gender>
-        <GPA>3.9999</GPA>
-        <Level>20</Level>
-        <Address>Mars</Address>
+    <Student ID ="20200134">
+    <FirstName>Ahmed</FirstName>
+    <LastName>Mohamed</LastName>
+    <Gender>Male</Gender>
+    <GPA>3.17</GPA>
+    <Level>4</Level>
+    <Address>Giza</Address>
     </Student>
-    <Student ID="20200645">
-        <FirstName>Youssef</FirstName>
-        <LastName>Ta2y</LastName>
-        <Gender>Male</Gender>
-        <GPA>3.9999999</GPA>
-        <Level>100</Level>
-        <Address>Pluto</Address>
-    </Student>
-<Student ID="123"><FirstName/><LastName/><Gender/><GPA>3.5</GPA><Level>0</Level><Address/></Student><Student ID="1234"><FirstName>null</FirstName><LastName>null</LastName><Gender>null</Gender><GPA>3.5</GPA><Level>0</Level><Address>null</Address></Student><Student ID="1234"><FirstName>null</FirstName><LastName>null</LastName><Gender>null</Gender><GPA>3.5</GPA><Level>0</Level><Address>null</Address></Student></University>
+<Student ID="20200057"><FirstName>Ahmed</FirstName><LastName>Mohamed</LastName><Gender>Male</Gender><GPA>3.9999</GPA><Level>20</Level><Address>Mars</Address></Student><Student ID="123"><FirstName>John</FirstName><LastName>Doe</LastName><Gender>Male</Gender><GPA>3.5</GPA><Level>3</Level><Address>123 Main St</Address></Student><Student ID="1"><FirstName>1</FirstName><LastName>1</LastName><Gender/><GPA>1.0</GPA><Level>1</Level><Address>1</Address></Student><Student ID="1"><FirstName>1</FirstName><LastName>1</LastName><Gender/><GPA>1.0</GPA><Level>1</Level><Address>1</Address></Student><Student ID="123"><FirstName>John</FirstName><LastName>Doe</LastName><Gender>Male</Gender><GPA>3.5</GPA><Level>3</Level><Address>123 Main St</Address></Student><Student ID="222"><FirstName>Fox</FirstName><LastName>Doe</LastName><Gender>Male</Gender><GPA>2.5</GPA><Level>4</Level><Address>144 Main St</Address></Student></University>

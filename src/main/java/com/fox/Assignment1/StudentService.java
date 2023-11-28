@@ -20,17 +20,17 @@ import java.util.Objects;
 
 @Service
 public class StudentService {
+
     public List<StudentModel> XMLRead() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            // Load the input XML document, parse it and return an instance of the
-            // Document class.
+            // Load the input XML document, parse it and return an instance of the Document class.
             // TODO: Change the path to the XML file
             Document document = builder.parse(new File(Settings.XML_FILE_PATH));
 
-            List<StudentModel> Students = new ArrayList<StudentModel>();
+            List<StudentModel> students = new ArrayList<>();
             NodeList nodeList = document.getDocumentElement().getChildNodes();
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node node = nodeList.item(i);
@@ -39,38 +39,120 @@ public class StudentService {
                     Element elem = (Element) node;
 
                     // Get the value of the ID attribute.
-                    String ID = node.getAttributes().getNamedItem("ID").getNodeValue();
+                    String ID = elem.getAttribute("ID");
 
-                    // Get the value of all sub-elements.
-                    String firstname = elem.getElementsByTagName("FirstName")
-                            .item(0).getChildNodes().item(0).getNodeValue();
+                    // Get values of sub-elements with null checks
+                    String firstName = getNodeValue(elem, "FirstName");
+                    String lastName = getNodeValue(elem, "LastName");
+                    String gender = getNodeValue(elem, "Gender");
+                    Double gpa = getDoubleNodeValue(elem, "GPA");
+                    Integer level = getIntNodeValue(elem, "Level");
+                    String address = getNodeValue(elem, "Address");
 
-                    String lastname = elem.getElementsByTagName("LastName").item(0)
-                            .getChildNodes().item(0).getNodeValue();
-
-                    String Gender = elem.getElementsByTagName("Gender").item(0)
-                            .getChildNodes().item(0).getNodeValue();
-
-                    double GPA = Double.parseDouble(elem.getElementsByTagName("GPA")
-                            .item(0).getChildNodes().item(0).getNodeValue());
-
-                    int Level = Integer.parseInt(elem.getElementsByTagName("Level")
-                            .item(0).getChildNodes().item(0).getNodeValue());
-
-                    String Address = elem.getElementsByTagName("Address").item(0)
-                            .getChildNodes().item(0).getNodeValue();
-
-                    Students.add(new StudentModel(ID, firstname, lastname, Gender, GPA, Level, Address));
+                    // Check for null values before adding to the list
+                    if (ID != null && firstName != null && lastName != null && gender != null &&
+                            gpa != null && level != null && address != null) {
+                        students.add(new StudentModel(ID, firstName, lastName, gender, gpa, level, address));
+                    } else {
+                        // Handle missing or null values if needed
+                    }
                 }
-
             }
-            return Students;
+            return students;
         } catch (IOException | ParserConfigurationException | SAXException e) {
             // Handle the exception or log it
             e.printStackTrace();
             return new ArrayList<>(); // Return an empty list or handle the error accordingly
         }
     }
+
+    // Helper method to get string node value with null check
+    private String getNodeValue(Element element, String tagName) {
+        Node node = element.getElementsByTagName(tagName).item(0);
+        if (node != null && node.getFirstChild() != null) {
+            return node.getFirstChild().getNodeValue();
+        }
+        return null;
+    }
+
+    // Helper method to get double node value with null check
+    private Double getDoubleNodeValue(Element element, String tagName) {
+        String value = getNodeValue(element, tagName);
+        if (value != null) {
+            try {
+                return Double.parseDouble(value);
+            } catch (NumberFormatException e) {
+                // Handle parsing error if needed
+            }
+        }
+        return null;
+    }
+
+    // Helper method to get integer node value with null check
+    private Integer getIntNodeValue(Element element, String tagName) {
+        String value = getNodeValue(element, tagName);
+        if (value != null) {
+            try {
+                return Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                // Handle parsing error if needed
+            }
+        }
+        return null;
+    }
+
+//    public List<StudentModel> XMLRead() {
+//        try {
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder builder = factory.newDocumentBuilder();
+//
+//            // Load the input XML document, parse it and return an instance of the
+//            // Document class.
+//            // TODO: Change the path to the XML file
+//            Document document = builder.parse(new File(Settings.XML_FILE_PATH));
+//
+//            List<StudentModel> Students = new ArrayList<StudentModel>();
+//            NodeList nodeList = document.getDocumentElement().getChildNodes();
+//            for (int i = 0; i < nodeList.getLength(); i++) {
+//                Node node = nodeList.item(i);
+//
+//                if (node.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element elem = (Element) node;
+//
+//                    // Get the value of the ID attribute.
+//                    String ID = node.getAttributes().getNamedItem("ID").getNodeValue();
+//
+//                    // Get the value of all sub-elements.
+//                    String firstname = elem.getElementsByTagName("FirstName")
+//                            .item(0).getChildNodes().item(0).getNodeValue();
+//
+//                    String lastname = elem.getElementsByTagName("LastName").item(0)
+//                            .getChildNodes().item(0).getNodeValue();
+//
+//                    String Gender = elem.getElementsByTagName("Gender").item(0)
+//                            .getChildNodes().item(0).getNodeValue();
+//
+//                    double GPA = Double.parseDouble(elem.getElementsByTagName("GPA")
+//                            .item(0).getChildNodes().item(0).getNodeValue());
+//
+//                    int Level = Integer.parseInt(elem.getElementsByTagName("Level")
+//                            .item(0).getChildNodes().item(0).getNodeValue());
+//
+//                    String Address = elem.getElementsByTagName("Address").item(0)
+//                            .getChildNodes().item(0).getNodeValue();
+//
+//                    Students.add(new StudentModel(ID, firstname, lastname, Gender, GPA, Level, Address));
+//                }
+//
+//            }
+//            return Students;
+//        } catch (IOException | ParserConfigurationException | SAXException e) {
+//            // Handle the exception or log it
+//            e.printStackTrace();
+//            return new ArrayList<>(); // Return an empty list or handle the error accordingly
+//        }
+//    }
+
 
     public void addStudent(
             String filePath,
