@@ -1,9 +1,12 @@
 package com.fox.Assignment1;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -130,6 +133,40 @@ public class StudentController {
         }
 
         return studentsWithTargetAddress;
+    }
+    @GetMapping("/sort")
+    public List<StudentModel> sortStudents2(
+            @RequestParam("attribute") String attribute,
+            @RequestParam("order") int order) {
+        // 0 Ascending , 1 Descending
+
+        try {
+            System.out.println("Starting sorting process...");
+
+            // Read student data from XML file
+            List<StudentModel> students = studentService.XMLRead();
+
+            System.out.println("Read students from XML...");
+
+            // Sort the students based on attribute and order
+            List<StudentModel> sortedStudents = studentService.sortStudents(students, attribute, order);
+
+            System.out.println("Sorted students...");
+
+            // Write sorted content back to XML file
+
+            studentService.rewriteFile(sortedStudents,Settings.XML_FILE_PATH);
+
+            System.out.println("Sorting completed.");
+
+            return sortedStudents;
+        } catch (Exception e) {
+            // Log the exception for debugging
+            e.printStackTrace();
+            System.out.println("Error occurred: " + e.getMessage());
+            // Handle the exception or return a default value as needed
+            return Collections.emptyList(); // Return an empty list or handle the error accordingly
+        }
     }
 
     @PostMapping("/")

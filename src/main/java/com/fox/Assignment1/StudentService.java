@@ -12,11 +12,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import java.io.FileWriter;
-import java.util.Objects;
 
 @Service
 public class StudentService {
@@ -100,6 +98,61 @@ public class StudentService {
         }
         return null;
     }
+
+
+
+    public List<StudentModel> sortStudents(List<StudentModel> students, String attribute, int order) {
+        Comparator<StudentModel> comparator = switch (attribute.toLowerCase()) {
+            case "id" -> Comparator.comparing(StudentModel::getID);
+            case "firstname" -> Comparator.comparing(StudentModel::getFirstName);
+            case "lastname" -> Comparator.comparing(StudentModel::getLastName);
+            case "gpa" -> Comparator.comparing(StudentModel::getGPA);
+            case "level" -> Comparator.comparing(StudentModel::getLevel);
+            case "address" -> Comparator.comparing(StudentModel::getAddress);
+            default -> throw new IllegalArgumentException("Invalid attribute: " + attribute);
+        };
+
+        if (order == 1) {
+            comparator = comparator.reversed();
+        } else if (order != 0) {
+            throw new IllegalArgumentException("Invalid order: " + order);
+        }
+
+        students.sort(comparator);
+        return students;
+    }
+
+
+
+
+    public void rewriteFile(List<StudentModel> students, String filePath) {
+        try {
+            // Create a new Document object using DocumentBuilderFactory and DocumentBuilder classes
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Create a new Document
+            Document doc = dBuilder.newDocument();
+
+            // Create the root element (University)
+            Element universityElement = doc.createElement("University");
+            doc.appendChild(universityElement);
+
+            // Create student elements and add them to the root element
+            for (StudentModel student : students) {
+                Element newStudentElement = createStudentElement(doc, student);
+                universityElement.appendChild(newStudentElement);
+            }
+
+            // Write the updated XML file
+            writeXmlFile(doc, filePath);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 //    public List<StudentModel> XMLRead() {
 //        try {
@@ -269,3 +322,6 @@ public class StudentService {
         }
     }
 }
+
+
+
