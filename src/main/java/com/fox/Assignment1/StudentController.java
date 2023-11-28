@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.lang.String;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/Student")
@@ -32,7 +29,7 @@ public class StudentController {
 
 
     @GetMapping("/ByGPA/{targetGPA}")
-    public List<StudentModel> getStudentsByGPA(@PathVariable double targetGPA) {
+    public ResponseEntity<Map<String, Object>> getStudentsByGPA(@PathVariable double targetGPA) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetGPA = new ArrayList<>();
@@ -43,11 +40,17 @@ public class StudentController {
             }
         }
 
-        return studentsWithTargetGPA;
+        int count = studentsWithTargetGPA.size();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", count);
+        response.put("students", studentsWithTargetGPA);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/ByName/{targetName}")
-    public List<StudentModel> getStudentsByName(@PathVariable String targetName) {
+    public ResponseEntity<Map<String, Object>> getStudentsByName(@PathVariable String targetName) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetName = new ArrayList<>();
@@ -58,11 +61,17 @@ public class StudentController {
             }
         }
 
-        return studentsWithTargetName;
+        int count = studentsWithTargetName.size();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", count);
+        response.put("students", studentsWithTargetName);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/ByLastName/{LastName}")
-    public List<StudentModel> getStudentsByLastName(@PathVariable String LastName) {
+    public ResponseEntity<Map<String, Object>> getStudentsByLastName(@PathVariable String LastName) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetLastName = new ArrayList<>();
@@ -73,11 +82,17 @@ public class StudentController {
             }
         }
 
-        return studentsWithTargetLastName;
+        int count = studentsWithTargetLastName.size();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", count);
+        response.put("students", studentsWithTargetLastName);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/ByGender/{Gender}")
-    public List<StudentModel> getStudentsByGender(@PathVariable String Gender) {
+    public ResponseEntity<Map<String, Object>> getStudentsByGender(@PathVariable String Gender) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetGender = new ArrayList<>();
@@ -88,10 +103,32 @@ public class StudentController {
             }
         }
 
-        return studentsWithTargetGender;
+        int count = studentsWithTargetGender.size();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", count);
+        response.put("students", studentsWithTargetGender);
+
+        return ResponseEntity.ok().body(response);
     }
+//    @GetMapping("/ByID/{ID}")
+//    public List<StudentModel> getStudentsByID(@PathVariable String ID) {
+//        List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
+//
+//        List<StudentModel> studentsWithTargetID = new ArrayList<>();
+//
+//        for (StudentModel student : students) {
+//            if (Objects.equals(student.getID(), ID)) {
+//                studentsWithTargetID.add(student);
+//            }
+//        }
+//
+//        return studentsWithTargetID;
+//    }
+
+//Return The Count in the body
     @GetMapping("/ByID/{ID}")
-    public List<StudentModel> getStudentsByID(@PathVariable String ID) {
+    public ResponseEntity<Map<String, Object>> getStudentsByID(@PathVariable String ID) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetID = new ArrayList<>();
@@ -102,11 +139,19 @@ public class StudentController {
             }
         }
 
-        return studentsWithTargetID;
+        int count = studentsWithTargetID.size();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", count);
+        response.put("students", studentsWithTargetID);
+
+        return ResponseEntity.ok().body(response);
     }
 
+
+
     @GetMapping("/ByLevel/{Level}")
-    public List<StudentModel> getStudentsLevel(@PathVariable int Level) {
+    public ResponseEntity<Map<String, Object>> getStudentsLevel(@PathVariable int Level) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetLevel = new ArrayList<>();
@@ -117,11 +162,21 @@ public class StudentController {
             }
         }
 
-        return studentsWithTargetLevel;
+
+        int count = studentsWithTargetLevel.size();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", count);
+        response.put("students", studentsWithTargetLevel);
+
+        return ResponseEntity.ok().body(response);
     }
 
+
+
+
     @GetMapping("/ByAddress/{Address}")
-    public List<StudentModel> getStudentsByAddress(@PathVariable String Address) {
+    public ResponseEntity<Map<String, Object>> getStudentsByAddress(@PathVariable String Address) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
 
         List<StudentModel> studentsWithTargetAddress = new ArrayList<>();
@@ -132,8 +187,17 @@ public class StudentController {
             }
         }
 
-        return studentsWithTargetAddress;
+        int count = studentsWithTargetAddress.size();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("count", count);
+        response.put("students", studentsWithTargetAddress);
+
+        return ResponseEntity.ok().body(response);
     }
+
+
+
     @GetMapping("/sort")
     public List<StudentModel> sortStudents2(
             @RequestParam("attribute") String attribute,
