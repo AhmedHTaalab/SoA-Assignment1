@@ -18,7 +18,6 @@ public class Assignment1Application {
 	public static void main(String[] args) {
 
 		SpringApplication.run(Assignment1Application.class, args);
-
 	}
 
 	@Bean
@@ -26,7 +25,8 @@ public class Assignment1Application {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry reg) {
-				reg.addMapping("/**").allowedOrigins("*").allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS");
+				reg.addMapping("/**").allowedOrigins("*").allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE",
+						"PATCH", "OPTIONS");
 			}
 		};
 

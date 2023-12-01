@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Students</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+<h2>Students List</h2>
+<form id="studentsTable">
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>GPA</th>
+        <th>Level</th>
+        <th>Address</th>
+    </tr>
+</form>
+
+<script>
+    function sumbit(){
+        // Fetch data from the server
+        fetch('/Student/')
+            .then(response => response.json())
+            .then(data => {
+                // Update the table with the received data
+                const studentsTable = document.getElementById('studentsTable');
+
+                data.forEach(student => {
+                    const row = studentsTable.insertRow();
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2);
+                    const cell4 = row.insertCell(3);
+                    const cell5 = row.insertCell(4);
+                    const cell6 = row.insertCell(5);
+
+                    cell1.innerHTML = student.ID;
+                    cell2.innerHTML = student.FirstName;
+                    cell3.innerHTML = student.LastName;
+                    cell4.innerHTML = student.GPA;
+                    cell5.innerHTML = student.Level;
+                    cell6.innerHTML = student.Address;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            }
+    </script>
+</body>
+
+</html>
