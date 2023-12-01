@@ -109,6 +109,7 @@ public class StudentService {
             case "gpa" -> Comparator.comparing(StudentModel::getGPA);
             case "level" -> Comparator.comparing(StudentModel::getLevel);
             case "address" -> Comparator.comparing(StudentModel::getAddress);
+            case "gender" -> Comparator.comparing(StudentModel::getGender);
             default -> throw new IllegalArgumentException("Invalid attribute: " + attribute);
         };
 
