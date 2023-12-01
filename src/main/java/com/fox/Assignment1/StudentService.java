@@ -26,9 +26,8 @@ public class StudentService {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            // Load the input XML document, parse it and return an instance of the Document
-            // class.
-            // TODO: Change the path to the XML file
+            // Load the input XML document, parse it and return
+            // an instance of the Document class.
             Document document = builder.parse(new File(Settings.XML_FILE_PATH));
 
             List<StudentModel> students = new ArrayList<>();
@@ -59,6 +58,7 @@ public class StudentService {
                     }
                 }
             }
+
             return students;
         } catch (IOException | ParserConfigurationException | SAXException e) {
             // Handle the exception or log it
@@ -104,7 +104,7 @@ public class StudentService {
 
     public void addStudent(
             String filePath,
-            StudentModel student) {
+            StudentModel student) throws IllegalArgumentException {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -115,9 +115,26 @@ public class StudentService {
 
             // Add the new student element to the existing university
             addStudentToUniversity(filePath, doc, newStudentElement);
-        } catch (Exception e) {
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private boolean isStudentIDExists(Document doc, String studentID) {
+        NodeList studentList = doc.getElementsByTagName("Student");
+        for (int i = 0; i < studentList.getLength(); i++) {
+            Node studentNode = studentList.item(i);
+            if (studentNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element studentElement = (Element) studentNode;
+                String existingID = studentElement.getAttribute("ID");
+                if (existingID.equals(studentID)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private Element createStudentElement(
@@ -125,19 +142,76 @@ public class StudentService {
             StudentModel student) {
         // Create student element
         Element studentElement = doc.createElement("Student");
-        studentElement.setAttribute("ID", student.getID());
+        String ID = student.getID();
 
-        System.out.println(student.toString());
+        System.out.println(ID);
+        ensureFieldNotNull(ID, "ID");
+        ensureStringNotEmpty(ID, "ID");
+
+        if (isStudentIDExists(doc, ID)) {
+            throw new IllegalArgumentException("Student with ID " + ID + " already exists.");
+        }
+
+        studentElement.setAttribute("ID", String.valueOf(ID));
+
+        String firstName = student.getFirstName();
+        String lastName = student.getLastName();
+        String gender = student.getGender();
+        Double gpa = student.getGPA();
+        Integer level = student.getLevel();
+        String address = student.getAddress();
+
+        ensureFieldNotNull(firstName, "FirstName");
+        ensureFieldNotNull(lastName, "LastName");
+        ensureFieldNotNull(gender, "Gender");
+        ensureFieldNotNull(gpa, "GPA");
+        ensureFieldNotNull(level, "Level");
+        ensureFieldNotNull(address, "Address");
+
+        ensureStringNotEmpty(firstName, "FirstName");
+        ensureStringNotEmpty(lastName, "LastName");
+        ensureStringNotEmpty(gender, "Gender");
+        ensureStringNotEmpty(address, "Address");
+
+        ensureAlphabeticString(firstName, "FirstName");
+        ensureAlphabeticString(lastName, "LastName");
+        ensureAlphabeticString(address, "Address");
+
+        ensureGPAValid(gpa);
 
         // Create child elements for the student
-        createElementWithTextContent(doc, studentElement, "FirstName", String.valueOf(student.getFirstName()));
-        createElementWithTextContent(doc, studentElement, "LastName", String.valueOf(student.getLastName()));
-        createElementWithTextContent(doc, studentElement, "Gender", String.valueOf(student.getGender()));
-        createElementWithTextContent(doc, studentElement, "GPA", String.valueOf(student.getGPA()));
-        createElementWithTextContent(doc, studentElement, "Level", String.valueOf(student.getLevel()));
-        createElementWithTextContent(doc, studentElement, "Address", String.valueOf(student.getAddress()));
+        createElementWithTextContent(doc, studentElement, "FirstName", String.valueOf(firstName));
+        createElementWithTextContent(doc, studentElement, "LastName", String.valueOf(lastName));
+        createElementWithTextContent(doc, studentElement, "Gender", String.valueOf(gender));
+        createElementWithTextContent(doc, studentElement, "GPA", String.valueOf(gpa));
+        createElementWithTextContent(doc, studentElement, "Level", String.valueOf(level));
+        createElementWithTextContent(doc, studentElement, "Address", String.valueOf(address));
 
         return studentElement;
+    }
+
+    void ensureAlphabeticString(String fieldValue, String fieldName) {
+        if (!fieldValue.matches("[a-zA-Z]+")) {
+            throw new IllegalArgumentException(fieldName + " must contain only alphabetic characters");
+        }
+    }
+
+    void ensureFieldNotNull(Object fieldValue, String fieldName) {
+        if (Objects.isNull(fieldValue)) {
+            throw new IllegalArgumentException(fieldName + " cannot be null");
+        }
+    }
+
+    void ensureStringNotEmpty(String fieldValue, String fieldName) {
+        if (fieldValue.isEmpty() || fieldValue.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " cannot be empty");
+        }
+    }
+
+    void ensureGPAValid(Double gpa) {
+        if (gpa < 0 || gpa > 4) {
+            throw new IllegalArgumentException("GPA must be between 0 and 4");
+        }
     }
 
     private void createElementWithTextContent(
@@ -189,29 +263,31 @@ public class StudentService {
         Students = XMLRead();
 
         // find the student and copy the new data
-        StudentModel fonudStudent = Students.stream()
+        StudentModel foundStudent = Students.stream()
                 .filter(studentModel -> studentModel.getID().equals(studentID))
                 .findFirst()
                 .orElse(null);
 
-        if (fonudStudent != null) {
+        if (foundStudent != null) {
             if (newFirstName != null)
-                fonudStudent.setFirstName(newFirstName);
+                foundStudent.setFirstName(newFirstName);
 
             if (newLastName != null)
-                fonudStudent.setLastName(newLastName);
+                foundStudent.setLastName(newLastName);
 
             if (newGender != null)
-                fonudStudent.setGender(newGender);
+                foundStudent.setGender(newGender);
 
             if (newGPA != null)
-                fonudStudent.setGPA(newGPA);
+                foundStudent.setGPA(newGPA);
 
             if (newLevel != null)
-                fonudStudent.setLevel(newLevel);
+                foundStudent.setLevel(newLevel);
 
             if (newAddress != null)
-                fonudStudent.setAddress(newAddress);
+                foundStudent.setAddress(newAddress);
+        } else {
+            return null;
         }
 
         try {
@@ -247,46 +323,35 @@ public class StudentService {
             e.printStackTrace();
         }
 
-        return fonudStudent;
+        return foundStudent;
     }
 
     public void deleteStudentByID(String studentID, String filePath) {
-        // Read XML file
-        List<StudentModel> Students = new ArrayList<>();
-        Students = XMLRead();
-
-        Students.removeIf(student -> Objects.equals(student.getID(), studentID));
-
         try {
-            // Create a new Document object using DocumentBuilderFactory and DocumentBuilder
-            // classes
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            // Open the XML document
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(new File(filePath));
 
-            // Parse the XML file using the Document object
-            Document doc = dBuilder.parse(new File(filePath));
-
-            // Get the root element (University)
-            Element universityElement = doc.getDocumentElement();
-
-            // Remove all child nodes of the root element
-            NodeList childNodes = universityElement.getChildNodes();
-            for (int i = childNodes.getLength() - 1; i >= 0; i--) {
-                Node node = childNodes.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    universityElement.removeChild(node);
+            // Find the student by ID
+            NodeList studentList = doc.getElementsByTagName("Student");
+            for (int i = 0; i < studentList.getLength(); i++) {
+                Element studentElement = (Element) studentList.item(i);
+                String id = studentElement.getAttribute("ID");
+                if (id.equals(studentID)) {
+                    // Delete the student
+                    studentElement.getParentNode().removeChild(studentElement);
+                    // Save the changes
+                    writeXmlFile(doc, filePath);
+                    return;
                 }
             }
 
-            // Create new student elements and add them to the root element
-            for (StudentModel student : Students) {
-                Element newStudentElement = createStudentElement(doc, student);
-                universityElement.appendChild(newStudentElement);
-            }
+            // If student not found, throw exception
+            throw new IllegalArgumentException("Student with ID " + studentID + " not found.");
 
-            // Write the updated XML file
-            writeXmlFile(doc, filePath);
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            // Handle any exceptions
             e.printStackTrace();
         }
     }

@@ -1,6 +1,7 @@
 package com.fox.Assignment1;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.lang.String;
 import java.util.ArrayList;
@@ -133,35 +134,52 @@ public class StudentController {
     }
 
     @PostMapping("/")
-    public String addStudent(@RequestBody StudentModel student) {
-        studentService.addStudent(Settings.XML_FILE_PATH, student);
-        return "Student Added";
+    public ResponseEntity<String> addStudent(@RequestBody StudentModel student) {
+        try {
+            studentService.addStudent(Settings.XML_FILE_PATH, student);
+            return ResponseEntity.ok("Student Added");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     @PostMapping("/addStudents")
-    public String addStudents(@RequestBody List<StudentModel> students) {
+    public ResponseEntity<String> addStudents(@RequestBody List<StudentModel> students) {
         for (StudentModel student : students) {
-            studentService.addStudent(Settings.XML_FILE_PATH, student);
+            try {
+                studentService.addStudent(Settings.XML_FILE_PATH, student);
+            } catch (Exception e) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
         }
-        return "Students Added";
+
+        return ResponseEntity.ok("Students Added");
     }
 
     @PutMapping("/updateByID/{ID}")
-    public StudentModel updateStudent(@PathVariable String ID, @RequestBody StudentModel student) {
-        return studentService.updateStudentByID(ID, Settings.XML_FILE_PATH,
+    public ResponseEntity<StudentModel> updateStudent(@PathVariable String ID, @RequestBody StudentModel student) {
+        StudentModel s = studentService.updateStudentByID(ID, Settings.XML_FILE_PATH,
                 student.getFirstName(),
                 student.getLastName(),
                 student.getGender(),
                 student.getGPA(),
                 student.getLevel(),
                 student.getAddress());
+
+        if (s == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(s);
     }
 
     @DeleteMapping("/deleteByID/{ID}")
-    public String deleteStudent(@PathVariable String ID) {
-        studentService.deleteStudentByID(ID, Settings.XML_FILE_PATH);
-        return String.format("Student with ID %s deleted successfully", ID);
-
+    public ResponseEntity<String> deleteStudent(@PathVariable String ID) {
+        try {
+            studentService.deleteStudentByID(ID, Settings.XML_FILE_PATH);
+            return ResponseEntity.ok("Student with ID " + ID + " is deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Student with ID " + ID + " is not found");
+        }
     }
-
 }
