@@ -12,11 +12,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import java.io.FileWriter;
-import java.util.Objects;
 
 @Service
 public class StudentService {
@@ -101,6 +99,111 @@ public class StudentService {
         }
         return null;
     }
+
+    public List<StudentModel> sortStudents(List<StudentModel> students, String attribute, int order) {
+        Comparator<StudentModel> comparator = switch (attribute.toLowerCase()) {
+            case "id" -> Comparator.comparing(StudentModel::getID);
+            case "firstname" -> Comparator.comparing(StudentModel::getFirstName);
+            case "lastname" -> Comparator.comparing(StudentModel::getLastName);
+            case "gpa" -> Comparator.comparing(StudentModel::getGPA);
+            case "level" -> Comparator.comparing(StudentModel::getLevel);
+            case "address" -> Comparator.comparing(StudentModel::getAddress);
+            case "gender" -> Comparator.comparing(StudentModel::getGender);
+            default -> throw new IllegalArgumentException("Invalid attribute: " + attribute);
+        };
+
+        if (order == 1) {
+            comparator = comparator.reversed();
+        } else if (order != 0) {
+            throw new IllegalArgumentException("Invalid order: " + order);
+        }
+
+        students.sort(comparator);
+        return students;
+    }
+
+    public void rewriteFile(List<StudentModel> students, String filePath) {
+        try {
+            // Create a new Document object using DocumentBuilderFactory and DocumentBuilder
+            // classes
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            // Create a new Document
+            Document doc = dBuilder.newDocument();
+
+            // Create the root element (University)
+            Element universityElement = doc.createElement("University");
+            doc.appendChild(universityElement);
+
+            // Create student elements and add them to the root element
+            for (StudentModel student : students) {
+                Element newStudentElement = createStudentElement(doc, student);
+                universityElement.appendChild(newStudentElement);
+            }
+
+            // Write the updated XML file
+            writeXmlFile(doc, filePath);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // public List<StudentModel> XMLRead() {
+    // try {
+    // DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    // DocumentBuilder builder = factory.newDocumentBuilder();
+    //
+    // // Load the input XML document, parse it and return an instance of the
+    // // Document class.
+    // // TODO: Change the path to the XML file
+    // Document document = builder.parse(new File(Settings.XML_FILE_PATH));
+    //
+    // List<StudentModel> Students = new ArrayList<StudentModel>();
+    // NodeList nodeList = document.getDocumentElement().getChildNodes();
+    // for (int i = 0; i < nodeList.getLength(); i++) {
+    // Node node = nodeList.item(i);
+    //
+    // if (node.getNodeType() == Node.ELEMENT_NODE) {
+    // Element elem = (Element) node;
+    //
+    // // Get the value of the ID attribute.
+    // String ID = node.getAttributes().getNamedItem("ID").getNodeValue();
+    //
+    // // Get the value of all sub-elements.
+    // String firstname = elem.getElementsByTagName("FirstName")
+    // .item(0).getChildNodes().item(0).getNodeValue();
+    //
+    // String lastname = elem.getElementsByTagName("LastName").item(0)
+    // .getChildNodes().item(0).getNodeValue();
+    //
+    // String Gender = elem.getElementsByTagName("Gender").item(0)
+    // .getChildNodes().item(0).getNodeValue();
+    //
+    // double GPA = Double.parseDouble(elem.getElementsByTagName("GPA")
+    // .item(0).getChildNodes().item(0).getNodeValue());
+    //
+    // int Level = Integer.parseInt(elem.getElementsByTagName("Level")
+    // .item(0).getChildNodes().item(0).getNodeValue());
+    //
+    // String Address = elem.getElementsByTagName("Address").item(0)
+    // .getChildNodes().item(0).getNodeValue();
+    //
+    // Students.add(new StudentModel(ID, firstname, lastname, Gender, GPA, Level,
+    // Address));
+    // }
+    //
+    // }
+    // return Students;
+    // } catch (IOException | ParserConfigurationException | SAXException e) {
+    // // Handle the exception or log it
+    // e.printStackTrace();
+    // return new ArrayList<>(); // Return an empty list or handle the error
+    // accordingly
+    // }
+    // }
 
     public void addStudent(
             String filePath,
