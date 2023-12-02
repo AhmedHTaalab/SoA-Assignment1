@@ -29,7 +29,5 @@ public class Assignment1Application {
 						"PATCH", "OPTIONS");
 			}
 		};
-
 	}
-
 }

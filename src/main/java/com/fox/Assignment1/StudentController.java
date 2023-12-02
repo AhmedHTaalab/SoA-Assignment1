@@ -158,19 +158,23 @@ public class StudentController {
 
     @PutMapping("/updateByID/{ID}")
     public ResponseEntity<StudentModel> updateStudent(@PathVariable String ID, @RequestBody StudentModel student) {
-        StudentModel s = studentService.updateStudentByID(ID, Settings.XML_FILE_PATH,
-                student.getFirstName(),
-                student.getLastName(),
-                student.getGender(),
-                student.getGPA(),
-                student.getLevel(),
-                student.getAddress());
+        try {
+            StudentModel s = studentService.updateStudentByID(ID, Settings.XML_FILE_PATH,
+                    student.getFirstName(),
+                    student.getLastName(),
+                    student.getGender(),
+                    student.getGPA(),
+                    student.getLevel(),
+                    student.getAddress());
 
-        if (s == null) {
-            return ResponseEntity.notFound().build();
+            if (s == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(s);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(null);
         }
-
-        return ResponseEntity.ok(s);
     }
 
     @DeleteMapping("/deleteByID/{ID}")
