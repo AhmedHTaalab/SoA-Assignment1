@@ -109,22 +109,23 @@ public class StudentController {
 
         return ResponseEntity.ok().body(response);
     }
-//    @GetMapping("/ByID/{ID}")
-//    public List<StudentModel> getStudentsByID(@PathVariable String ID) {
-//        List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
-//
-//        List<StudentModel> studentsWithTargetID = new ArrayList<>();
-//
-//        for (StudentModel student : students) {
-//            if (Objects.equals(student.getID(), ID)) {
-//                studentsWithTargetID.add(student);
-//            }
-//        }
-//
-//        return studentsWithTargetID;
-//    }
+    // @GetMapping("/ByID/{ID}")
+    // public List<StudentModel> getStudentsByID(@PathVariable String ID) {
+    // List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead
+    // returns a list of all students
+    //
+    // List<StudentModel> studentsWithTargetID = new ArrayList<>();
+    //
+    // for (StudentModel student : students) {
+    // if (Objects.equals(student.getID(), ID)) {
+    // studentsWithTargetID.add(student);
+    // }
+    // }
+    //
+    // return studentsWithTargetID;
+    // }
 
-//Return The Count in the body
+    // Return The Count in the body
     @GetMapping("/ByID/{ID}")
     public ResponseEntity<Map<String, Object>> getStudentsByID(@PathVariable String ID) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
@@ -146,8 +147,6 @@ public class StudentController {
         return ResponseEntity.ok().body(response);
     }
 
-
-
     @GetMapping("/ByLevel/{Level}")
     public ResponseEntity<Map<String, Object>> getStudentsLevel(@PathVariable int Level) {
         List<StudentModel> students = studentService.XMLRead(); // Assuming XMLRead returns a list of all students
@@ -160,7 +159,6 @@ public class StudentController {
             }
         }
 
-
         int count = studentsWithTargetLevel.size();
 
         Map<String, Object> response = new HashMap<>();
@@ -169,9 +167,6 @@ public class StudentController {
 
         return ResponseEntity.ok().body(response);
     }
-
-
-
 
     @GetMapping("/ByAddress/{Address}")
     public ResponseEntity<Map<String, Object>> getStudentsByAddress(@PathVariable String Address) {
@@ -194,8 +189,6 @@ public class StudentController {
         return ResponseEntity.ok().body(response);
     }
 
-
-
     @GetMapping("/sort")
     public List<StudentModel> sortStudents2(
             @RequestParam("attribute") String attribute,
@@ -217,7 +210,7 @@ public class StudentController {
 
             // Write sorted content back to XML file
 
-            studentService.rewriteFile(sortedStudents,Settings.XML_FILE_PATH);
+            studentService.rewriteFile(sortedStudents, Settings.XML_FILE_PATH);
 
             System.out.println("Sorting completed.");
 
