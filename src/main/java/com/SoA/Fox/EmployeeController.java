@@ -77,19 +77,25 @@ public class EmployeeController {
     }
 
 
-//    @PostMapping("/")
-//    public String addStudent(@RequestBody Employee student) {
-//        employeeService.addStudent(Settings.XML_FILE_PATH, student);
-//        return "Student Added";
-//    }
+    @PostMapping("/")
+    public String addEmployee(@RequestBody Employee emp) {
+        employeeService.addEmployee(Settings.XML_FILE_PATH, emp);
+        return "Employee Added";
+    }
 
-//    @DeleteMapping("/deleteByID/{ID}")
-//    public String deleteStudent(@PathVariable String ID) {
-//        employeeService.deleteStudentByID(ID, Settings.XML_FILE_PATH);
-//        return String.format("Student with ID %s deleted successfully", ID);
-//
-//    }
+    @DeleteMapping("/deleteByID/{ID}")
+    public String deleteEmployee(@PathVariable String ID) {
+        employeeService.deleteEmployeeByID(ID, Settings.XML_FILE_PATH);
+        return String.format("Employee with ID %s deleted successfully", ID);
 
+    }
+
+    @PutMapping("/updateEmployee/{employeeID}")
+    public String updateEmployee(@PathVariable int employeeID) {
+        employeeService.updateEmployee(employeeID, "Team Leader", 1);
+
+        return String.format("Employee with ID %d updated successfully", employeeID);
+    }
 
     @GetMapping("/javaExperts")
     public List<Employee> getJavaExperts() {
